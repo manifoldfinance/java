@@ -1,5 +1,4 @@
 ---
-
 # Versions of support libs
 version:
   agentBond: "1.2.0"
@@ -7,12 +6,14 @@ version:
   jmxExporter: "0.3.1"
 
 # Who to blame
-maintainer: "rhuss@redhat.com"
+maintainer: "aldo@manifoldx.com"
 
 # Meta info influencing the build
 fish-pepper:
+  # Docker registry
+  registry: "docker.io"
   # Docker Repo User
-  repoUser: "fabric8"
+  repoUser: "manifoldfinance"
 
 # External blocks
 blocks:
