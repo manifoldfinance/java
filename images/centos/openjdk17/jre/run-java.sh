@@ -44,7 +44,6 @@
 # CONTAINER_MAX_MEMORY: Max memory for the container (if running within a container)
 # MAX_CORE_LIMIT: Number of cores available for the container (if running within a container)
 
-
 # ==========================================================
 
 # Fail on a single failed command in a pipeline (if supported)
@@ -102,7 +101,7 @@ auto_detect_jar_file() {
 # Check directories (arg 2...n) for a jar file (arg 1)
 find_jar_file() {
   local jar="$1"
-  shift;
+  shift
 
   # Absolute path check if jar specifies an absolute path
   if [ "${jar}" != ${jar#/} ]; then
@@ -168,8 +167,7 @@ max_memory() {
     local max_mem_cgroup="$(cat ${mem_file})"
     local max_mem_meminfo_kb="$(cat /proc/meminfo | awk '/MemTotal/ {print $2}')"
     local max_mem_meminfo="$(expr $max_mem_meminfo_kb \* 1024)"
-    if [ ${max_mem_cgroup:-0} != -1 ] && [ ${max_mem_cgroup:-0} -lt ${max_mem_meminfo:-0} ]
-    then
+    if [ ${max_mem_cgroup:-0} != -1 ] && [ ${max_mem_cgroup:-0} -lt ${max_mem_meminfo:-0} ]; then
       echo "${max_mem_cgroup}"
     fi
   fi
@@ -189,20 +187,20 @@ init_limit_env_vars() {
 }
 
 init_java_major_version() {
-    # Initialize JAVA_MAJOR_VERSION variable if missing
-    if [ -z "${JAVA_MAJOR_VERSION:-}" ]; then
-        local full_version=""
+  # Initialize JAVA_MAJOR_VERSION variable if missing
+  if [ -z "${JAVA_MAJOR_VERSION:-}" ]; then
+    local full_version=""
 
-        # Parse JAVA_VERSION variable available in containers
-        if [ -n "${JAVA_VERSION:-}" ]; then
-            full_version="$JAVA_VERSION"
-        elif [ -n "${JAVA_HOME:-}" ] && [ -r "${JAVA_HOME}/release" ]; then
-            full_version="$(grep -e '^JAVA_VERSION=' ${JAVA_HOME}/release | sed -e 's/.*\"\([0-9.]\{1,\}\).*/\1/')"
-        else
-            full_version=$(java -version 2>&1 | head -1 | sed -e 's/.*\"\([0-9.]\{1,\}\).*/\1/')
-        fi
-        export JAVA_MAJOR_VERSION=$(echo $full_version | sed -e 's/[^0-9]*\(1\.\)\{0,1\}\([0-9]\{1,\}\).*/\2/')
+    # Parse JAVA_VERSION variable available in containers
+    if [ -n "${JAVA_VERSION:-}" ]; then
+      full_version="$JAVA_VERSION"
+    elif [ -n "${JAVA_HOME:-}" ] && [ -r "${JAVA_HOME}/release" ]; then
+      full_version="$(grep -e '^JAVA_VERSION=' ${JAVA_HOME}/release | sed -e 's/.*\"\([0-9.]\{1,\}\).*/\1/')"
+    else
+      full_version=$(java -version 2>&1 | head -1 | sed -e 's/.*\"\([0-9.]\{1,\}\).*/\1/')
     fi
+    export JAVA_MAJOR_VERSION=$(echo $full_version | sed -e 's/[^0-9]*\(1\.\)\{0,1\}\([0-9]\{1,\}\).*/\2/')
+  fi
 }
 
 load_env() {
@@ -253,8 +251,8 @@ run_java_options() {
 }
 
 debug_options() {
-  if [ -n "${JAVA_ENABLE_DEBUG:-}" ] || [ -n "${JAVA_DEBUG_ENABLE:-}" ] ||  [ -n "${JAVA_DEBUG:-}" ]; then
-	  local debug_port="${JAVA_DEBUG_PORT:-5005}"
+  if [ -n "${JAVA_ENABLE_DEBUG:-}" ] || [ -n "${JAVA_DEBUG_ENABLE:-}" ] || [ -n "${JAVA_DEBUG:-}" ]; then
+    local debug_port="${JAVA_DEBUG_PORT:-5005}"
     local suspend_mode="n"
     if [ -n "${JAVA_DEBUG_SUSPEND:-}" ]; then
       if ! echo "${JAVA_DEBUG_SUSPEND}" | grep -q -e '^\(false\|n\|no\|0\)$'; then
@@ -263,10 +261,10 @@ debug_options() {
     fi
 
     local address_prefix=""
-	  if [ "${JAVA_MAJOR_VERSION:-0}" -ge "9" ]; then
+    if [ "${JAVA_MAJOR_VERSION:-0}" -ge "9" ]; then
       address_prefix="*:"
-	  fi
-	  echo "-agentlib:jdwp=transport=dt_socket,server=y,suspend=${suspend_mode},address=${address_prefix}${debug_port}"
+    fi
+    echo "-agentlib:jdwp=transport=dt_socket,server=y,suspend=${suspend_mode},address=${address_prefix}${debug_port}"
   fi
 }
 
@@ -295,7 +293,7 @@ format_classpath() {
         classpath="${classpath}${sep}${full_path}"
       fi
       sep=":"
-    done < "${cp_file}"
+    done <"${cp_file}"
     echo "${classpath}"
   else
     # Supposed to be a single line, colon separated classpath file
@@ -431,9 +429,9 @@ cpu_options() {
       core_limit="${CONTAINER_CORE_LIMIT}"
     fi
     echo "-XX:ParallelGCThreads=${core_limit} " \
-         "-XX:ConcGCThreads=${core_limit} " \
-         "-Djava.util.concurrent.ForkJoinPool.common.parallelism=${core_limit} " \
-         "-XX:CICompilerCount=$(ci_compiler_count $core_limit)"
+      "-XX:ConcGCThreads=${core_limit} " \
+      "-Djava.util.concurrent.ForkJoinPool.common.parallelism=${core_limit} " \
+      "-XX:CICompilerCount=$(ci_compiler_count $core_limit)"
   fi
 }
 
@@ -482,15 +480,15 @@ java_proxy_options() {
   local transport="$2"
   local ret=""
 
-  if [ -n "$url" ] ; then
+  if [ -n "$url" ]; then
     eval $(parse_url "$url")
-    if [ -n "$hostname" ] ; then
+    if [ -n "$hostname" ]; then
       ret="-D${transport}.proxyHost=${hostname}"
     fi
-    if [ -n "$port" ] ; then
+    if [ -n "$port" ]; then
       ret="$ret -D${transport}.proxyPort=${port}"
     fi
-    if [ -n "$username" -o -n "$password" ] ; then
+    if [ -n "$username" -o -n "$password" ]; then
       echo "WARNING: Proxy URL for ${transport} contains authentication credentials, these are not supported by java" >&2
     fi
   fi
@@ -504,7 +502,7 @@ proxy_options() {
   ret="$ret $(java_proxy_options "${http_proxy:-${HTTP_PROXY:-}}" http)"
 
   local noProxy="${no_proxy:-${NO_PROXY:-}}"
-  if [ -n "$noProxy" ] ; then
+  if [ -n "$noProxy" ]; then
     ret="$ret -Dhttp.nonProxyHosts=$(echo "|$noProxy" | sed -e 's/,[[:space:]]*/|/g' | sed -e 's/[[:space:]]//g' | sed -e 's/|\./|\*\./g' | cut -c 2-)"
   fi
   echo "$ret"
@@ -557,52 +555,52 @@ classpath() {
 
 # Checks if a flag is present in the arguments.
 hasflag() {
-    local filters="$@"
-    for var in $ARGS; do
-        for filter in $filters; do
-          if [ "$var" = "$filter" ]; then
-              echo 'true'
-              return
-          fi
-        done
+  local filters="$@"
+  for var in $ARGS; do
+    for filter in $filters; do
+      if [ "$var" = "$filter" ]; then
+        echo 'true'
+        return
+      fi
     done
+  done
 }
 
 # ==============================================================================
 
 options() {
-    if [ -z ${1:-} ]; then
-      java_options
-      return
-    fi
+  if [ -z ${1:-} ]; then
+    java_options
+    return
+  fi
 
-    local ret=""
-    if [ $(hasflag --debug) ]; then
-      ret="$ret $(debug_options)"
-    fi
-    if [ $(hasflag --proxy) ]; then
-      ret="$ret $(proxy_options)"
-    fi
-    if [ $(hasflag --java-default) ]; then
-      ret="$ret $(java_default_options)"
-    fi
-    if [ $(hasflag --memory) ]; then
-      ret="$ret $(memory_options)"
-    fi
-    if [ $(hasflag --jit) ]; then
-      ret="$ret $(jit_options)"
-    fi
-    if [ $(hasflag --diagnostics) ]; then
-      ret="$ret $(diagnostics_options)"
-    fi
-    if [ $(hasflag --cpu) ]; then
-      ret="$ret $(cpu_options)"
-    fi
-    if [ $(hasflag --gc) ]; then
-      ret="$ret $(gc_options)"
-    fi
+  local ret=""
+  if [ $(hasflag --debug) ]; then
+    ret="$ret $(debug_options)"
+  fi
+  if [ $(hasflag --proxy) ]; then
+    ret="$ret $(proxy_options)"
+  fi
+  if [ $(hasflag --java-default) ]; then
+    ret="$ret $(java_default_options)"
+  fi
+  if [ $(hasflag --memory) ]; then
+    ret="$ret $(memory_options)"
+  fi
+  if [ $(hasflag --jit) ]; then
+    ret="$ret $(jit_options)"
+  fi
+  if [ $(hasflag --diagnostics) ]; then
+    ret="$ret $(diagnostics_options)"
+  fi
+  if [ $(hasflag --cpu) ]; then
+    ret="$ret $(cpu_options)"
+  fi
+  if [ $(hasflag --gc) ]; then
+    ret="$ret $(gc_options)"
+  fi
 
-    echo $ret | awk '$1=$1'
+  echo $ret | awk '$1=$1'
 }
 
 # Start JVM
@@ -612,13 +610,13 @@ run() {
 
   local args
   cd ${JAVA_APP_DIR}
-  if [ -n "${JAVA_MAIN_CLASS:-}" ] ; then
-     args="${JAVA_MAIN_CLASS}"
+  if [ -n "${JAVA_MAIN_CLASS:-}" ]; then
+    args="${JAVA_MAIN_CLASS}"
   elif [ -n "${JAVA_APP_JAR:-}" ]; then
-     args="-jar ${JAVA_APP_JAR}"
+    args="-jar ${JAVA_APP_JAR}"
   else
-     echo "Either JAVA_MAIN_CLASS or JAVA_APP_JAR needs to be given"
-     exit 1
+    echo "Either JAVA_MAIN_CLASS or JAVA_APP_JAR needs to be given"
+    exit 1
   fi
   # Don't put ${args} in quotes, otherwise it would be interpreted as a single arg.
   # However it could be two args (see above). zsh doesn't like this btw, but zsh is not

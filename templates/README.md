@@ -2,7 +2,8 @@
 
 {{? fp.config.base.deprecated }}> ** This image is deprecated and not maintained anymore. Please select one of the other flavors (alpine, centos).**
 
------
+---
+
 {{?}}
 
 This image is based on {{= fp.config.base.description }} and provides {{= fp.config.version.description }} ({{= fp.param.type.toUpperCase() }})
@@ -10,12 +11,13 @@ This image is based on {{= fp.config.base.description }} and provides {{= fp.con
 It includes:
 
 {{? fp.config.base.agent == "agent-bond" }}
-* An [Agent Bond](https://github.com/fabric8io/agent-bond) agent with [Jolokia](http://www.jolokia.org) and Prometheus' [jmx_exporter](https://github.com/prometheus/jmx_exporter). The agent is installed as `/opt/agent-bond/agent-bond.jar`. See below for configuration options.
-{{?? fp.config.base.agent == "jolokia" }}
-*  A [Jolokia](http://www.jolokia.org) agent. See below how to configure this.
-{{?}}
 
-* A startup script [`{{= fp.config.base.baseDir }}/run-java.sh`](#startup-script-run-javash) for starting up Java applications.
+- An [Agent Bond](https://github.com/fabric8io/agent-bond) agent with [Jolokia](http://www.jolokia.org) and Prometheus' [jmx_exporter](https://github.com/prometheus/jmx_exporter). The agent is installed as `/opt/agent-bond/agent-bond.jar`. See below for configuration options.
+  {{?? fp.config.base.agent == "jolokia" }}
+- A [Jolokia](http://www.jolokia.org) agent. See below how to configure this.
+  {{?}}
+
+- A startup script [`{{= fp.config.base.baseDir }}/run-java.sh`](#startup-script-run-javash) for starting up Java applications.
 
 ### Agent Bond
 
@@ -29,8 +31,8 @@ For example, the following snippet can be added to a script starting up your Jav
 
 The following versions and defaults are used:
 
-* [Jolokia](http://www.jolokia.org) : version **{{= fp.version.jolokia }}** and port **8778**
-* [jmx_exporter](https://github.com/prometheus/jmx_exporter): version **{{= fp.version.jmxExporter }}** and port **9779**
+- [Jolokia](http://www.jolokia.org) : version **{{= fp.version.jolokia }}** and port **8778**
+- [jmx_exporter](https://github.com/prometheus/jmx_exporter): version **{{= fp.version.jmxExporter }}** and port **9779**
 
 You can influence the behaviour of `agent-bond-opts` by setting various environment variables:
 
@@ -46,8 +48,8 @@ For these images the variable **JAVA_APP_DIR** has the default value `{{= fp.con
 
 ### Versions:
 
-* Base-Image: **{{= fp.config.base.description + " " + fp.config.base.version }}**
-* Java: **{{= fp.config.version.description + " " + fp.config.version.version }}** ({{= fp.config.type.description }}){{? fp.config.base.agent == "agent-bond" }}
-* Agent-Bond: **{{= fp.version.agentBond }}** (Jolokia {{= fp.version.jolokia }}, jmx_exporter {{= fp.version.jmxExporter }}){{?? fp.config.base.agent == "jolokia" }}
-* Jolokia: **{{= fp.version.jolokia }}**
-{{?}}
+- Base-Image: **{{= fp.config.base.description + " " + fp.config.base.version }}**
+- Java: **{{= fp.config.version.description + " " + fp.config.version.version }}** ({{= fp.config.type.description }}){{? fp.config.base.agent == "agent-bond" }}
+- Agent-Bond: **{{= fp.version.agentBond }}** (Jolokia {{= fp.version.jolokia }}, jmx_exporter {{= fp.version.jmxExporter }}){{?? fp.config.base.agent == "jolokia" }}
+- Jolokia: **{{= fp.version.jolokia }}**
+  {{?}}

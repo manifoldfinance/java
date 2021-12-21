@@ -1,4 +1,4 @@
-FROM centos:centos8.4.2105
+FROM ubuntu:20.04
 
 USER root
 
@@ -11,21 +11,27 @@ ENV JAVA_APP_DIR=/deployments \
 
 # /dev/urandom is used as random source, which is prefectly safe
 # according to http://www.2uo.de/myths-about-urandom/
-RUN yum install -y \
-      java-17-openjdk-17.0.1.0.12-2.el8_5 \ 
-      java-17-openjdk-devel-17.0.1.0.12-2.el8_5 \ 
-    && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/jre/lib/security/java.security \
-    && yum clean all
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openjdk-17-jre-headless=17.0.1+12-1~20.04 -V \
+  && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/java-17-openjdk-amd64/lib/security/java.security \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME /etc/alternatives/jre
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 # Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts /opt/run-java-options
 
 RUN mkdir -p /opt/agent-bond \ 
+  && apt-get update \
+  && apt-get install -y curl \
   && curl https://repo.maven.apache.org/maven2/io/fabric8/agent-bond-agent/1.2.0/agent-bond-agent-1.2.0.jar \
           -o /opt/agent-bond/agent-bond.jar \
   && chmod 444 /opt/agent-bond/agent-bond.jar \
-  && chmod 755 /opt/run-java-options 
+  && chmod 755 /opt/run-java-options \
+  && apt-get remove -y curl \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+  
 
 COPY jmx_exporter_config.yml /opt/agent-bond/
 

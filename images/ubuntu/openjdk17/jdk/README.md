@@ -1,6 +1,6 @@
-## Fabric8 Java Base Image OpenJDK 17 (JRE)
+## Fabric8 Java Base Image OpenJDK 17 (JDK)
 
-This image is based on CentOS and provides OpenJDK 17 (JRE)
+This image is based on Ubuntu and provides OpenJDK 17 (JDK)
 
 It includes:
 
@@ -171,6 +171,6 @@ mvn clean install
 
 ### Versions:
 
-- Base-Image: **CentOS 8**
-- Java: **OpenJDK 17 17** (Java Runtime Environment (JRE))
+- Base-Image: **Ubuntu 20.04**
+- Java: **OpenJDK 17 17** (Java Development Kit (JDK))
 - Agent-Bond: **1.2.0** (Jolokia 1.7.1, jmx_exporter 0.3.1)

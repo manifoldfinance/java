@@ -4,8 +4,8 @@ fish-pepper:
     - base
     - version
     - type
-  name: "java"
-  build: "1.9.0"
+  name: java
+  build: "2.0.0"
 
 # Used for escaping in 'agent-bond-opts' where the same delimiters are used
 abSepOpen: "{{"
@@ -14,23 +14,46 @@ abSepClosed: "}}"
 config:
   base:
     default:
-      agent: "agent-bond"
-      baseDir: "/deployments"
+      agent: agent-bond
+      baseDir: /deployments
+    alpine:
+      from: alpine:3.15.0
+      version: "3.11.12"
+      description: Alpine
+      javaPackage:
+        17: 17.0.1_p12-r0
     centos:
-      from: "centos:centos8.4.2105"
+      from: centos:centos8.4.2105
       createUser: true
-      user: "jboss"
+      user: jboss
       version: "8"
-      description: "CentOS"
+      description: CentOS
       javaPackage:
         17: 17.0.1.0.12-2.el8_5
+    ubi:
+      from: registry.access.redhat.com/ubi8/ubi-minimal:8.5-204
+      createUser: false
+      createUBIUser: true
+      ubiUser: 1001
+      version: "8.5"
+      description: UBI
+      javaPackage:
+        17: 17.0.1.0.12-2.el8_5
+    ubuntu:
+      from: ubuntu:20.04
+      createUser: true
+      user: jboss
+      version: "20.04"
+      description: Ubuntu
+      javaPackage:
+        17: 17.0.1+12-1~20.04
   version:
     openjdk17:
       version: "17"
-      description: "OpenJDK 17"
+      description: OpenJDK 17
       major: 17
   type:
     jre:
-      description: "Java Runtime Environment (JRE)"
+      description: Java Runtime Environment (JRE)
     jdk:
-      description: "Java Development Kit (JDK)"
+      description: Java Development Kit (JDK)

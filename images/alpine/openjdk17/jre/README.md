@@ -1,6 +1,6 @@
 ## Fabric8 Java Base Image OpenJDK 17 (JRE)
 
-This image is based on CentOS and provides OpenJDK 17 (JRE)
+This image is based on Alpine and provides OpenJDK 17 (JRE)
 
 It includes:
 
@@ -171,6 +171,6 @@ mvn clean install
 
 ### Versions:
 
-- Base-Image: **CentOS 8**
+- Base-Image: **Alpine 3.11.12**
 - Java: **OpenJDK 17 17** (Java Runtime Environment (JRE))
 - Agent-Bond: **1.2.0** (Jolokia 1.7.1, jmx_exporter 0.3.1)

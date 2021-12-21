@@ -24,7 +24,7 @@ command = "prettier"
 options = [
   "--write",
 ]
-includes = ["**/*.{json,yaml,yml}"]
+includes = ["**/*.{json,md,yaml,yml}"]
 excludes = []
 
 [formatter.hadolint]
@@ -32,4 +32,13 @@ command = "hadolint"
 options = [
   "--failure-threshold", "error"
 ]
-includes = ["Dockerfile"]
+includes = [
+  "images/alpine/openjdk17/jdk/Dockerfile",
+  "images/alpine/openjdk17/jre/Dockerfile",
+  "images/centos/openjdk17/jdk/Dockerfile",
+  "images/centos/openjdk17/jre/Dockerfile",
+  "images/ubi/openjdk17/jdk/Dockerfile",
+  "images/ubi/openjdk17/jre/Dockerfile",
+  "images/ubuntu/openjdk17/jdk/Dockerfile",
+  "images/ubuntu/openjdk17/jre/Dockerfile",
+  ]

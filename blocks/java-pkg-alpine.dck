@@ -1,0 +1,7 @@
+{{ var major = fp.config.version.major; }}
+# /dev/urandom is used as random source, which is perfectly safe
+# according to http://www.2uo.de/myths-about-urandom/
+RUN apk add --no-cache \
+    curl \
+    {{= fp.param.type == 'jre' ? 'openjdk' + major + '-jre' : 'openjdk' + major }}={{= fp.config.base.javaPackage[major]}} \
+ && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security

@@ -1,4 +1,4 @@
-FROM centos:centos8.4.2105
+FROM alpine:3.15.0
 
 USER root
 
@@ -9,15 +9,12 @@ ENV JAVA_APP_DIR=/deployments \
     JAVA_MAJOR_VERSION=17
 
 
-# /dev/urandom is used as random source, which is prefectly safe
+# /dev/urandom is used as random source, which is perfectly safe
 # according to http://www.2uo.de/myths-about-urandom/
-RUN yum install -y \
-      java-17-openjdk-17.0.1.0.12-2.el8_5 \ 
-      java-17-openjdk-devel-17.0.1.0.12-2.el8_5 \ 
-    && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/jre/lib/security/java.security \
-    && yum clean all
-
-ENV JAVA_HOME /etc/alternatives/jre
+RUN apk add --no-cache \
+    curl \
+    openjdk17=17.0.1_p12-r0 \
+ && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security
 # Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts /opt/run-java-options
 
@@ -36,16 +33,5 @@ COPY run-java.sh /deployments/
 RUN chmod 755 /deployments/run-java.sh
 
 
-
-# Run under user "jboss" and prepare for be running under OpenShift, too
-RUN groupadd -r jboss -g 1000 \
-  && useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin jboss \
-  && chmod 755 /opt/jboss \
-  && chown -R jboss /deployments \
-  && usermod -g root -G "$(id -g jboss)" jboss \
-  && chmod -R "g+rwX" /deployments \
-  && chown -R jboss:root /deployments
-
-USER jboss
 
 CMD [ "/deployments/run-java.sh" ]
