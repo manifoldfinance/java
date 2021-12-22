@@ -1,20 +1,20 @@
 {{
   var destPath = fp.blockOpts.dest || "/bin/agent-bond-options";
   var agentBondVersion = fp.version.agentBond || fp.blockOpts.version || "1.2.0";
-}}# Agent bond including Jolokia and jmx_exporter
+}}
+# Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts {{= destPath }}
 
-RUN mkdir -p /opt/agent-bond \ {{? fp.param.base === "ubuntu" }}
+RUN mkdir -p /opt/agent-bond \{{? fp.param.base === "ubuntu" }}
   && apt-get update \
-  && apt-get install -y curl \{{?}}
+  && apt-get install -y --no-install-recommends curl \{{?}}
   && curl https://repo.maven.apache.org/maven2/io/fabric8/agent-bond-agent/{{= agentBondVersion }}/agent-bond-agent-{{= agentBondVersion }}.jar \
           -o /opt/agent-bond/agent-bond.jar \
   && chmod 444 /opt/agent-bond/agent-bond.jar \
   && chmod 755 {{= destPath}} {{? fp.param.base === "ubuntu" }}\
   && apt-get remove -y curl \
   && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
-  {{?}}
+  && rm -rf /var/lib/apt/lists/*{{?}}
 
 COPY jmx_exporter_config.yml /opt/agent-bond/
 

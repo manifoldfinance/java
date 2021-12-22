@@ -8,17 +8,17 @@ RUN mkdir -p /deployments
 ENV JAVA_APP_DIR=/deployments \
     JAVA_MAJOR_VERSION=17
 
-
 # /dev/urandom is used as random source, which is perfectly safe
 # according to http://www.2uo.de/myths-about-urandom/
 RUN apk add --no-cache \
     curl \
     openjdk17=17.0.1_p12-r0 \
- && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security
+  && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security
+
 # Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts /opt/run-java-options
 
-RUN mkdir -p /opt/agent-bond \ 
+RUN mkdir -p /opt/agent-bond \
   && curl https://repo.maven.apache.org/maven2/io/fabric8/agent-bond-agent/1.2.0/agent-bond-agent-1.2.0.jar \
           -o /opt/agent-bond/agent-bond.jar \
   && chmod 444 /opt/agent-bond/agent-bond.jar \

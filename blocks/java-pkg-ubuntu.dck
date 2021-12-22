@@ -1,8 +1,10 @@
-{{ var major = fp.config.version.major; }}
-# /dev/urandom is used as random source, which is prefectly safe
+{{
+  var major = fp.config.version.major;
+  var jvmPackageVersion = fp.config.base.javaPackage[major];
+}}# /dev/urandom is used as random source, which is prefectly safe
 # according to http://www.2uo.de/myths-about-urandom/
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openjdk-{{= fp.config.version.version }}-{{= fp.param.type }}-headless={{= fp.config.base.javaPackage[major]}} -V \
+  && apt-get install -y --no-install-recommends openjdk-{{= fp.config.version.version }}-{{= fp.param.type }}-headless={{= jvmPackageVersion }} -V \
   && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/java-{{= fp.config.version.version }}-openjdk-amd64/lib/security/java.security \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*

@@ -8,7 +8,6 @@ RUN mkdir -p /deployments
 ENV JAVA_APP_DIR=/deployments \
     JAVA_MAJOR_VERSION=17
 
-
 # /dev/urandom is used as random source, which is prefectly safe
 # according to http://www.2uo.de/myths-about-urandom/
 RUN apt-get update \
@@ -18,12 +17,13 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+
 # Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts /opt/run-java-options
 
-RUN mkdir -p /opt/agent-bond \ 
+RUN mkdir -p /opt/agent-bond \
   && apt-get update \
-  && apt-get install -y curl \
+  && apt-get install -y --no-install-recommends curl \
   && curl https://repo.maven.apache.org/maven2/io/fabric8/agent-bond-agent/1.2.0/agent-bond-agent-1.2.0.jar \
           -o /opt/agent-bond/agent-bond.jar \
   && chmod 444 /opt/agent-bond/agent-bond.jar \
@@ -31,7 +31,6 @@ RUN mkdir -p /opt/agent-bond \
   && apt-get remove -y curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-  
 
 COPY jmx_exporter_config.yml /opt/agent-bond/
 
@@ -40,8 +39,6 @@ EXPOSE 8778 9779
 # Add run script as /deployments/run-java.sh and make it executable
 COPY run-java.sh /deployments/
 RUN chmod 755 /deployments/run-java.sh
-
-
 
 # Run under user "jboss" and prepare for be running under OpenShift, too
 RUN groupadd -r jboss -g 1000 \

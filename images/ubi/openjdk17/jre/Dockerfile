@@ -8,7 +8,6 @@ RUN mkdir -p /deployments
 ENV JAVA_APP_DIR=/deployments \
     JAVA_MAJOR_VERSION=17
 
-
 # /dev/urandom is used as random source, which is prefectly safe
 # according to http://www.2uo.de/myths-about-urandom/
 RUN microdnf install java-17-openjdk-headless-17.0.1.0.12-2.el8_5 \
@@ -17,10 +16,11 @@ RUN microdnf install java-17-openjdk-headless-17.0.1.0.12-2.el8_5 \
     && microdnf clean all
 
 ENV JAVA_HOME /etc/alternatives/jre
+
 # Agent bond including Jolokia and jmx_exporter
 COPY agent-bond-opts /opt/run-java-options
 
-RUN mkdir -p /opt/agent-bond \ 
+RUN mkdir -p /opt/agent-bond \
   && curl https://repo.maven.apache.org/maven2/io/fabric8/agent-bond-agent/1.2.0/agent-bond-agent-1.2.0.jar \
           -o /opt/agent-bond/agent-bond.jar \
   && chmod 444 /opt/agent-bond/agent-bond.jar \

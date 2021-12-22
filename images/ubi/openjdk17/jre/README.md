@@ -1,6 +1,6 @@
 ## Java Base Image OpenJDK (JRE)
 
-This image is based on UBI and provides OpenJDK (JRE)
+This image is based on UBI and provides OpenJDK (JRE).
 
 It includes:
 

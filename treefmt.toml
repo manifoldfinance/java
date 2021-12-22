@@ -32,13 +32,4 @@ command = "hadolint"
 options = [
   "--failure-threshold", "error"
 ]
-includes = [
-  "images/alpine/openjdk17/jdk/Dockerfile",
-  "images/alpine/openjdk17/jre/Dockerfile",
-  "images/centos/openjdk17/jdk/Dockerfile",
-  "images/centos/openjdk17/jre/Dockerfile",
-  "images/ubi/openjdk17/jdk/Dockerfile",
-  "images/ubi/openjdk17/jre/Dockerfile",
-  "images/ubuntu/openjdk17/jdk/Dockerfile",
-  "images/ubuntu/openjdk17/jre/Dockerfile",
-  ]
+includes = ["images/**/*/Dockerfile"]
