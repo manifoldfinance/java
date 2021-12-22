@@ -1,6 +1,6 @@
-## Fabric8 Java Base Image OpenJDK 17 (JDK)
+## Java Base Image OpenJDK (JDK)
 
-This image is based on CentOS and provides OpenJDK 17 (JDK)
+This image is based on CentOS and provides OpenJDK (JDK)
 
 It includes:
 
@@ -172,5 +172,5 @@ mvn clean install
 ### Versions:
 
 - Base-Image: **CentOS 8**
-- Java: **OpenJDK 17 17** (Java Development Kit (JDK))
+- Java: **OpenJDK 17 (17.0.1.0.12-2.el8_5)** (Java Development Kit (JDK))
 - Agent-Bond: **1.2.0** (Jolokia 1.7.1, jmx_exporter 0.3.1)

@@ -1,4 +1,4 @@
-## Fabric8 Java Base Image {{= fp.config.version.description }} ({{= fp.param.type.toUpperCase() }})
+## Java Base Image {{= fp.config.version.description }} ({{= fp.param.type.toUpperCase() }})
 
 {{? fp.config.base.deprecated }}> ** This image is deprecated and not maintained anymore. Please select one of the other flavors (alpine, centos).**
 
@@ -6,7 +6,7 @@
 
 {{?}}
 
-This image is based on {{= fp.config.base.description }} and provides {{= fp.config.version.description }} ({{= fp.param.type.toUpperCase() }})
+This image is based on {{= fp.config.base.description }} and provides {{= fp.config.version.description }} ({{= fp.param.type.toUpperCase() }}).
 
 It includes:
 
@@ -49,7 +49,7 @@ For these images the variable **JAVA_APP_DIR** has the default value `{{= fp.con
 ### Versions:
 
 - Base-Image: **{{= fp.config.base.description + " " + fp.config.base.version }}**
-- Java: **{{= fp.config.version.description + " " + fp.config.version.version }}** ({{= fp.config.type.description }}){{? fp.config.base.agent == "agent-bond" }}
+- Java: **{{= fp.config.version.description + " " + fp.config.version.version + " (" + fp.config.base.javaPackage[fp.config.version.major] + ")" }}** ({{= fp.config.type.description }}){{? fp.config.base.agent == "agent-bond" }}
 - Agent-Bond: **{{= fp.version.agentBond }}** (Jolokia {{= fp.version.jolokia }}, jmx_exporter {{= fp.version.jmxExporter }}){{?? fp.config.base.agent == "jolokia" }}
 - Jolokia: **{{= fp.version.jolokia }}**
   {{?}}

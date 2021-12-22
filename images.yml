@@ -50,7 +50,7 @@ config:
   version:
     openjdk17:
       version: "17"
-      description: OpenJDK 17
+      description: OpenJDK
       major: 17
   type:
     jre:

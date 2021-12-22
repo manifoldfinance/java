@@ -1,6 +1,6 @@
-## Fabric8 Java Base Image OpenJDK 17 (JRE)
+## Java Base Image OpenJDK (JRE)
 
-This image is based on UBI and provides OpenJDK 17 (JRE)
+This image is based on UBI and provides OpenJDK (JRE)
 
 It includes:
 
@@ -172,5 +172,5 @@ mvn clean install
 ### Versions:
 
 - Base-Image: **UBI 8.5**
-- Java: **OpenJDK 17 17** (Java Runtime Environment (JRE))
+- Java: **OpenJDK 17 (17.0.1.0.12-2.el8_5)** (Java Runtime Environment (JRE))
 - Agent-Bond: **1.2.0** (Jolokia 1.7.1, jmx_exporter 0.3.1)
