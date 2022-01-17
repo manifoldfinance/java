@@ -2,26 +2,23 @@
 , nixpkgs ? import ./nixpkgs.nix { inherit system; }
 }:
 let
-  just = nixpkgs.just;
-  just-alias = nixpkgs.writeShellScriptBin "j" ''
-    exec ${nixpkgs.just}/bin/just "$@"
-  '';
+  sources = import ./sources.nix;
 
-  mkEnv = nixpkgs.callPackage ./mkEnv.nix { };
+  devshell = import sources.devshell { pkgs = nixpkgs; };
 in
-rec {
+{
   inherit nixpkgs;
 
-  env = mkEnv {
-    env = {
+  # Docs: https://numtide.github.io/devshell/modules_schema.html
+  env = devshell.mkShell {
+    env = [
       # Configure nix to use nixpgks
-      NIX_PATH = "nixpkgs=${toString nixpkgs.path}";
-    };
+      { name = "NIX_PATH"; value = "nixpkgs=${toString nixpkgs.path}"; }
+    ];
 
-    paths = [
+    packages = [
       # Development tools
-      just
-      just-alias
+      nixpkgs.just
       nixpkgs.niv
       nixpkgs.hadolint
 
@@ -34,6 +31,10 @@ rec {
       nixpkgs.yarn
       nixpkgs.nodejs-16_x
       nixpkgs.nodePackages.prettier
+    ];
+
+    commands = [
+      { category = "dev"; name = "j"; command = ''${nixpkgs.just}/bin/just "$@"''; help = "just a command runner"; }
     ];
   };
 }
